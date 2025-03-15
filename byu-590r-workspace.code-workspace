@@ -1,10 +1,13 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../byu-590r-frontend-vue"
-		}
-	]
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "../byu-590r-frontend-vue"
+        }
+    ],
+    "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }
