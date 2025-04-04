@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\BookController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -28,4 +29,8 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::post('user/send_verification_email','sendVerificationEmail');
     Route::post('user/change_email', 'changeEmail');
     });
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('books', BookController::class);
 });
