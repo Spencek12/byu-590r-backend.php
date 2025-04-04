@@ -34,3 +34,7 @@ Route::middleware('auth:sanctum')->group( function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('books', BookController::class);
 });
+Route::controller(BookController::class)->group(function () {
+    Route::post('books/{id}/update_book_picture', 'updateBookPicture');
+    Route::delete('books/{id}', [BookController::class, 'destroy']);
+});
