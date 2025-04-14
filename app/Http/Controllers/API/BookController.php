@@ -43,7 +43,7 @@ class BookController extends BaseController {
         if ($request->hasFile('file')) {
             $extension = $request->file('file')->getClientOriginalExtension();
             $image_name = time() . '_book_cover.' . $extension;
-            $path = $request->file('file')->storeAs('book_cover_pictures', $image_name, 's3');
+            $path = $request->file('file')->storeAs('images', $image_name, 's3');
 
             Storage::disk('s3')->setVisibility($path, 'public');
             if(!$path) {
@@ -84,7 +84,7 @@ class BookController extends BaseController {
         if ($request->hasFile('file')) {
             $extension = $request->file('file')->getClientOriginalExtension();
             $image_name = time() . '_book_cover.' . $extension;
-            $path = $request->file('file')->storeAs('book_cover_pictures', $image_name, 's3');
+            $path = $request->file('file')->storeAs('images', $image_name, 's3');
 
             Storage::disk('s3')->setVisibility($path, 'public');
             if(!$path) {
@@ -94,9 +94,11 @@ class BookController extends BaseController {
         }
 
         $book->save();
-        if(isset($book->file)) {
-            $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
-        }
+
+        $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
+
+
+        
         return response()->json(['message' => 'Book cover picture updated successfully.', 'book' => $book]);
     }
 
@@ -121,9 +123,8 @@ class BookController extends BaseController {
         $book->description = $request->description;
         // $book->inventory_total_qty = $request->inventory_total_qty;
         $book->save();
-        if(isset($book->file)) {
-            $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
-        }
+
+        $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
         $success['book'] = $book;
         return $this->sendResponse($book, 'Book updated successfully.');
 
