@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\BookController;
+use App\Http\Controllers\API\GenreController;
 
 
 // Route::get('/user', function (Request $request) {
@@ -35,6 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('books', BookController::class);
 });
 Route::controller(BookController::class)->group(function () {
-    Route::post('books/{id}/update_book_picture', 'updateBookPicture');
+    // Route::post('books/{id}/update_book_picture', 'updateBookPicture');
+    Route::post('books/{id}/update_book_picture', [BookController::class, 'updateBookPicture']);
     Route::delete('books/{id}', [BookController::class, 'destroy']);
 });
+
+Route::get('/genres', [GenreController::class, 'index']);

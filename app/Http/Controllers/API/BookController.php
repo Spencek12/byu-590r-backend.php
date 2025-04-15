@@ -12,7 +12,9 @@ use Illuminate\Http\Response;
 
 class BookController extends BaseController {
     public function index() {
-        $books = Book::all()->map(function ($book) {
+        // $books = Book::all()->map(function ($book) {
+            $books = Book::with('genre')->get()->map(function ($book) {
+
             $bookCoverPath = $book->book_cover_picture;
             $fullPath = $this->getS3Url($bookCoverPath);
 
@@ -32,6 +34,7 @@ class BookController extends BaseController {
             'name' => 'required',
             'description' => 'required',
             'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'genre_id' => 'required|exists:genres,id',
             // 'inventory_total_qty' => 'required|integer |min:1'
         ]);
 
@@ -54,6 +57,7 @@ class BookController extends BaseController {
 
         $book->name = $request->name;
         $book->description = $request->description;
+        $book->genre_id = $request->genre_id;
         // $book->inventory_total_qty = $request->inventory_total_qty;
         // $book->checked_qty = 0;
         // $book->genre_id = request->genre_id;
@@ -61,6 +65,7 @@ class BookController extends BaseController {
         $book->save();
 
         $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
+        $book->load('genre');
         // $success['book'] = $book;
         // return $this->sendResponse($success, 'Book created successfully.');
         return $this->sendResponse($book, 'Book created successfully.');
@@ -107,6 +112,7 @@ class BookController extends BaseController {
             'name' => 'required',
             'description' => 'required',
             'file' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'genre_id' => 'required|exists:genres,id',
         ]);
 
         if ($validator->fails()) {
@@ -121,11 +127,13 @@ class BookController extends BaseController {
         $book = Book::findorFail($id);
         $book->name = $request->name;
         $book->description = $request->description;
+        $book->genre_id = $request->genre_id ?? $book->genre_id;
         // $book->inventory_total_qty = $request->inventory_total_qty;
         $book->save();
 
         $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
         $success['book'] = $book;
+        $book->load('genre');
         return $this->sendResponse($book, 'Book updated successfully.');
 
     }
