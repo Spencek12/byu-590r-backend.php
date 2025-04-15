@@ -60,11 +60,11 @@ class BookController extends BaseController {
 
         $book->save();
 
-        if(isset($book->file)) {
-            $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
-        }
-        $success['book'] = $book;
-        return $this->sendResponse($success, 'Book created successfully.');
+        $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
+        // $success['book'] = $book;
+        // return $this->sendResponse($success, 'Book created successfully.');
+        return $this->sendResponse($book, 'Book created successfully.');
+
     }
 
     public function updateBookPicture(Request $request, $id) {
@@ -96,10 +96,10 @@ class BookController extends BaseController {
         $book->save();
 
         $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
-
-
         
-        return response()->json(['message' => 'Book cover picture updated successfully.', 'book' => $book]);
+        // return response()->json(['message' => 'Book cover picture updated successfully.', 'book' => $book]);
+        return $this->sendResponse($book, 'Book cover picture updated successfully.');
+
     }
 
     public function update(Request $request, $id) {
