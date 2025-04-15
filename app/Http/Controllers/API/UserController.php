@@ -23,6 +23,8 @@ class UserController extends BaseController
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
+        \Log::info('uploadAvatar incoming request:', $request->allFiles());
+
         if ($request->hasFile('image')) {
             $authUser = Auth::user();
             $user = User::findOrFail($authUser->id);
