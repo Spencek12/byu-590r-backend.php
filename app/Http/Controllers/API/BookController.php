@@ -35,7 +35,7 @@ class BookController extends BaseController {
             'description' => 'required',
             'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'genre_id' => 'required|exists:genres,id',
-            // 'inventory_total_qty' => 'required|integer |min:1'
+            // 'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -58,17 +58,12 @@ class BookController extends BaseController {
         $book->name = $request->name;
         $book->description = $request->description;
         $book->genre_id = $request->genre_id;
-        // $book->inventory_total_qty = $request->inventory_total_qty;
-        // $book->checked_qty = 0;
-        // $book->genre_id = request->genre_id;
-
         $book->save();
 
         $book->book_cover_picture = $this->getS3Url($book->book_cover_picture);
         $book->load('genre');
-        // $success['book'] = $book;
-        // return $this->sendResponse($success, 'Book created successfully.');
-        return $this->sendResponse($book, 'Book created successfully.');
+        return response()->json($book, 201);
+
 
     }
 
